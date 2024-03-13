@@ -19,17 +19,17 @@ const logging = (request, response, next) => {
 };
 
 // CORS Middleware
-const cors = (req, res, next) => {
-  res.setHeader(
+const cors = (request, response, next) => {
+  response.setHeader(
     "Access-Control-Allow-Headers",
     "X-Requested-With,content-type, Accept,Authorization,Origin"
   );
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
+  response.setHeader("Access-Control-Allow-Origin", "*");
+  response.setHeader(
     "Access-Control-Allow-Methods",
     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
   );
-  res.setHeader("Access-Control-Allow-Credentials", true);
+  response.setHeader("Access-Control-Allow-Credentials", true);
   next();
 };
 
