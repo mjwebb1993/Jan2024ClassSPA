@@ -1,9 +1,26 @@
 // 'Import' the Express module instead of http
 import express from "express";
 import dotenv from "dotenv";
+import mongoose from "mongoose";
+import pizzas from "./routers/pizzas.js";
 
 // Load environment variables from .env file
 dotenv.config();
+
+// Connect to mongodb atlas server
+mongoose.connect(process.env.MONGODB, {
+  // Configuration options to remove deprecation warnings, just include them to remove clutter
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+const db = mongoose.connection;
+
+db.on("error", console.error.bind(console, "Connection Error:"));
+db.once(
+  "open",
+  console.log.bind(console, "Successfully opened connection to Mongo!")
+);
 
 // get the PORT from the environment variables, OR use 4040 as default
 const PORT = process.env.PORT || 4040;
@@ -24,6 +41,10 @@ const cors = (request, response, next) => {
     "Access-Control-Allow-Headers",
     "X-Requested-With,content-type, Accept,Authorization,Origin"
   );
+  // if you wanted to not have "*" in the origin
+  // and instead return the original URL
+  // const url = request.get("host");
+  // response.setHeader("Access-Control-Allow-Origin", `${url}`);
   response.setHeader("Access-Control-Allow-Origin", "*");
   response.setHeader(
     "Access-Control-Allow-Methods",
@@ -42,7 +63,7 @@ app.get("/status", (request, response) => {
   // Create the headers for response by default 200
   // Create the response body
   // End and return the response
-  response.send(JSON.stringify({ message: "Service healthy Express" }));
+  response.send(JSON.stringify({ message: "Service healthy" }));
 });
 
 // Handle the request with HTTP GET method with query parameters and a url parameter
@@ -84,6 +105,8 @@ app.get("/weather/:city", (request, response) => {
     city
   });
 });
+
+app.use("/pizzas", pizzas);
 
 // Tell the Express app to start listening
 // Let the humans know I am running and listening on 4040
