@@ -39,4 +39,66 @@ router.get("/", async (request, response) => {
   }
 });
 
+// Get a single pizza by ID
+router.get("/:id", async (request, response) => {
+  // http://localhost:4040/pizzas/pizzaId
+  try {
+    const data = await Pizza.findById(request.params.id);
+
+    response.json(data);
+  } catch (error) {
+    // Output error to the console incase it fails to send in response
+    console.log(error);
+
+    return response.status(500).json(error.errors);
+  }
+});
+
+// Remove a single pizza by ID
+router.delete("/:id", async (request, response) => {
+  // http://localhost:4040/pizzas/pizzaId
+  try {
+    const data = await Pizza.findByIdAndRemove(request.params.id);
+
+    response.json(data);
+  } catch (error) {
+    // Output error to the console incase it fails to send in response
+    console.log(error);
+
+    return response.status(500).json(error.errors);
+  }
+});
+
+// Update a single pizza by ID
+router.put("/:id", async (request, response) => {
+  try {
+    const foobar = request.body;
+
+    const data = await Pizza.findByIdAndUpdate(
+      request.params.id,
+      {
+        $set: {
+          crust: foobar.crust,
+          cheese: foobar.cheese,
+          sauce: foobar.sauce,
+          toppings: foobar.toppings
+        }
+      },
+      {
+        new: true
+      }
+    );
+
+    response.json(data);
+  } catch (error) {
+    // Output error to the console incase it fails to send in response
+    console.log(error);
+
+    if ("name" in error && error.name === "ValidationError")
+      return response.status(400).json(error.errors);
+
+    return response.status(500).json(error.errors);
+  }
+});
+
 export default router;
