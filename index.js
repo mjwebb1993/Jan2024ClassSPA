@@ -69,6 +69,50 @@ function afterRender(state) {
         });
     });
   }
+
+  if (state.view === "Pizza") {
+    document
+      .getElementById("search-button")
+      .addEventListener("click", event => {
+        event.preventDefault();
+
+        const column = document.getElementById("column").value;
+        const filter = document.getElementById("filter").value;
+
+        axios
+          .get(`${process.env.PIZZA_PLACE_API_URL}/pizzas?${column}=${filter}`)
+          .then(response => {
+            // We need to store the response to the state, in the next step but in the meantime let's see what it looks like so that we know what to store from the response.
+            store.Pizza.pizzas = response.data;
+            router.navigate("/pizza");
+          })
+          .catch(error => {
+            console.log("It puked", error);
+          });
+      });
+
+    Array.from(document.getElementsByClassName("delete")).forEach(button => {
+      button.addEventListener("click", event => {
+        event.preventDefault();
+
+        const pizzaId = event.target.dataset.id;
+        const pizzaIndex = event.target.dataset.index;
+
+        if (confirm(`Are you sure you want to delete pizza ${pizzaId}?`)) {
+          axios
+            .delete(`${process.env.PIZZA_PLACE_API_URL}/pizzas/${pizzaId}`)
+            .then(response => {
+              // We need to store the response to the state, in the next step but in the meantime let's see what it looks like so that we know what to store from the response.
+              store.Pizza.pizzas.splice(pizzaIndex, 1);
+              router.navigate("/pizza");
+            })
+            .catch(error => {
+              console.log("It puked", error);
+            });
+        }
+      });
+    });
+  }
 }
 
 router.hooks({
