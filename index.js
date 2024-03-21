@@ -166,6 +166,40 @@ router.hooks({
             done();
           });
         break;
+      case "Holidays":
+        axios
+          .get(
+            `https://calendarific.com/api/v2/holidays?api_key=${process.env.CALENDARIFIC_API_KEY}&country=us&year=2024`
+          )
+          .then(response => {
+            // We need to store the response to the state, in the next step but in the meantime let's see what it looks like so that we know what to store from the response.
+            console.log("response data", response.data);
+
+            store.Holidays.holidays = response.data.response.holidays;
+
+            done();
+          })
+          .catch(error => {
+            console.log("It puked", error);
+            done();
+          });
+        break;
+      case "Suggestions":
+        axios
+          .get(`${process.env.PIZZA_PLACE_API_URL}/yelp/restaurants/alton il`)
+          .then(response => {
+            // We need to store the response to the state, in the next step but in the meantime let's see what it looks like so that we know what to store from the response.
+            console.log("response data", response.data);
+
+            store.Suggestions.restaurants = response.data;
+
+            done();
+          })
+          .catch(error => {
+            console.log("It puked", error);
+            done();
+          });
+        break;
       case "Menu":
         // Do stuff here
         done();

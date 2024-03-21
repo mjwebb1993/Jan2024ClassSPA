@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import mongoose from "mongoose";
 import pizzas from "./routers/pizzas.js";
 import crusts from "./routers/crusts.js";
+import yelp from "./routers/yelp.js";
 
 // Load environment variables from .env file
 dotenv.config();
@@ -132,6 +133,7 @@ app.get("/weather/:city", (request, response) => {
 
 app.use("/pizzas", pizzas);
 app.use("/crusts", crusts);
+app.use("/yelp", yelp);
 
 // Tell the Express app to start listening
 // Let the humans know I am running and listening on 4040
