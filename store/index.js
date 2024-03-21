@@ -6,3 +6,5 @@ export { default as Viewnotfound } from "./Viewnotfound";
 export { default as Links } from "./Links";
 export { default as Footer } from "./Footer";
 export { default as Menu } from "./Menu";
+export { default as Holidays } from "./Holidays";
+export { default as Suggestions } from "./Suggestions";
